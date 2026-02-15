@@ -58,3 +58,14 @@ button:hover {
 .game-controls {
     margin: 20px;
 }
+
+.cell {
+    background-color: #cdc1b4;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #776e65;
+}
