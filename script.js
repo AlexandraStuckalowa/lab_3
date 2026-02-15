@@ -91,9 +91,12 @@ function moveLeft() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+
+        if (isGameOver()) {
+            document.getElementById('game-over-modal').style.display = 'block';
+        }
     }
 }
-
 function moveRight() {
     let moved = false;
     let addedScore = 0;
@@ -133,6 +136,10 @@ function moveRight() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+
+        if (isGameOver()) {
+            document.getElementById('game-over-modal').style.display = 'block';
+        }
     }
 }
 
@@ -173,6 +180,10 @@ function moveUp() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+
+        if (isGameOver()) {
+            document.getElementById('game-over-modal').style.display = 'block';
+        }
     }
 }
 
@@ -215,7 +226,39 @@ function moveDown() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+
+        if (isGameOver()) {
+            document.getElementById('game-over-modal').style.display = 'block';
+        }
     }
+}
+
+function isGameOver() {
+    for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 4; col++) {
+            if (grid[row][col] === 0) {
+                return false;
+            }
+        }
+    }
+    
+    for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 3; col++) {
+            if (grid[row][col] === grid[row][col + 1]) {
+                return false;
+            }
+        }
+    }
+    
+    for (let col = 0; col < 4; col++) {
+        for (let row = 0; row < 3; row++) {
+            if (grid[row][col] === grid[row + 1][col]) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
 }
 
 function handleKeyPress(event) {
