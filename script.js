@@ -34,6 +34,7 @@ function addRandomTile() {
         }
     }
     
+    
     if (emptyCells.length > 0) {
         const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
         const value = Math.random() < 0.9 ? 2 : 4;
@@ -53,12 +54,199 @@ function updateDisplay() {
     }
 }
 
+function moveLeft() {
+    let moved = false;
+    let addedScore = 0;
+    
+    for (let row = 0; row < 4; row++) {
+        let newRow = [];
+        for (let col = 0; col < 4; col++) {
+            if (grid[row][col] !== 0) {
+                newRow.push(grid[row][col]);
+            }
+        }
+        
+        for (let i = 0; i < newRow.length - 1; i++) {
+            if (newRow[i] === newRow[i + 1]) {
+                newRow[i] *= 2;
+                addedScore += newRow[i];
+                newRow.splice(i + 1, 1);
+            }
+        }
+        
+        while (newRow.length < 4) {
+            newRow.push(0);
+        }
+        
+        for (let col = 0; col < 4; col++) {
+            if (grid[row][col] !== newRow[col]) {
+                moved = true;
+            }
+            grid[row][col] = newRow[col];
+        }
+    }
+    
+    if (moved) {
+        score += addedScore;
+        scoreElement.textContent = score;
+        addRandomTile();
+        updateDisplay();
+    }
+}
+
+function moveRight() {
+    let moved = false;
+    let addedScore = 0;
+    
+    for (let row = 0; row < 4; row++) {
+        let newRow = [];
+        for (let col = 3; col >= 0; col--) {
+            if (grid[row][col] !== 0) {
+                newRow.push(grid[row][col]);
+            }
+        }
+        
+        for (let i = 0; i < newRow.length - 1; i++) {
+            if (newRow[i] === newRow[i + 1]) {
+                newRow[i] *= 2;
+                addedScore += newRow[i];
+                newRow.splice(i + 1, 1);
+            }
+        }
+        
+        while (newRow.length < 4) {
+            newRow.push(0);
+        }
+        
+        newRow.reverse();
+        
+        for (let col = 0; col < 4; col++) {
+            if (grid[row][col] !== newRow[col]) {
+                moved = true;
+            }
+            grid[row][col] = newRow[col];
+        }
+    }
+    
+    if (moved) {
+        score += addedScore;
+        scoreElement.textContent = score;
+        addRandomTile();
+        updateDisplay();
+    }
+}
+
+function moveUp() {
+    let moved = false;
+    let addedScore = 0;
+    
+    for (let col = 0; col < 4; col++) {
+        let newCol = [];
+        for (let row = 0; row < 4; row++) {
+            if (grid[row][col] !== 0) {
+                newCol.push(grid[row][col]);
+            }
+        }
+        
+        for (let i = 0; i < newCol.length - 1; i++) {
+            if (newCol[i] === newCol[i + 1]) {
+                newCol[i] *= 2;
+                addedScore += newCol[i];
+                newCol.splice(i + 1, 1);
+            }
+        }
+        
+        while (newCol.length < 4) {
+            newCol.push(0);
+        }
+        
+        for (let row = 0; row < 4; row++) {
+            if (grid[row][col] !== newCol[row]) {
+                moved = true;
+            }
+            grid[row][col] = newCol[row];
+        }
+    }
+    
+    if (moved) {
+        score += addedScore;
+        scoreElement.textContent = score;
+        addRandomTile();
+        updateDisplay();
+    }
+}
+
+function moveDown() {
+    let moved = false;
+    let addedScore = 0;
+    
+    for (let col = 0; col < 4; col++) {
+        let newCol = [];
+        for (let row = 3; row >= 0; row--) {
+            if (grid[row][col] !== 0) {
+                newCol.push(grid[row][col]);
+            }
+        }
+        
+        for (let i = 0; i < newCol.length - 1; i++) {
+            if (newCol[i] === newCol[i + 1]) {
+                newCol[i] *= 2;
+                addedScore += newCol[i];
+                newCol.splice(i + 1, 1);
+            }
+        }
+        
+        while (newCol.length < 4) {
+            newCol.push(0);
+        }
+        
+        newCol.reverse();
+        
+        for (let row = 0; row < 4; row++) {
+            if (grid[row][col] !== newCol[row]) {
+                moved = true;
+            }
+            grid[row][col] = newCol[row];
+        }
+    }
+    
+    if (moved) {
+        score += addedScore;
+        scoreElement.textContent = score;
+        addRandomTile();
+        updateDisplay();
+    }
+}
+
+function handleKeyPress(event) {
+    switch(event.key) {
+        case 'ArrowLeft':
+            event.preventDefault();
+            moveLeft();
+            break;
+        case 'ArrowRight':
+            event.preventDefault();
+            moveRight();
+            break;
+        case 'ArrowUp':
+            event.preventDefault();
+            moveUp();
+            break;
+        case 'ArrowDown':
+            event.preventDefault();
+            moveDown();
+            break;
+    }
+}
+
 function startGame() {
+    createGrid();
     initializeGrid();
     addRandomTile();
     addRandomTile();
     updateDisplay();
+    
+    document.addEventListener('keydown', handleKeyPress);
 }
 
-createGrid();
 startGame();
