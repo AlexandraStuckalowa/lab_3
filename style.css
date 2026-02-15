@@ -109,3 +109,24 @@ button:hover {
     border-radius: 5px;
     font-size: 16px;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+th, td {
+    border: 1px solid #bbada0;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #bbada0;
+    color: white;
+}
+
+#close-leaderboard-btn {
+    margin-top: 10px;
+}
