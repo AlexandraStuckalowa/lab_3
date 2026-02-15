@@ -91,6 +91,7 @@ function moveLeft() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+        saveGame();
 
         if (isGameOver()) {
             document.getElementById('game-over-modal').style.display = 'block';
@@ -136,6 +137,7 @@ function moveRight() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+        saveGame();
 
         if (isGameOver()) {
             document.getElementById('game-over-modal').style.display = 'block';
@@ -180,6 +182,7 @@ function moveUp() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+        saveGame();
 
         if (isGameOver()) {
             document.getElementById('game-over-modal').style.display = 'block';
@@ -226,6 +229,7 @@ function moveDown() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+        saveGame();
 
         if (isGameOver()) {
             document.getElementById('game-over-modal').style.display = 'block';
@@ -266,7 +270,27 @@ function newGame() {
     addRandomTile();
     addRandomTile();
     updateDisplay();
+    saveGame();
     document.getElementById('game-over-modal').style.display = 'none';
+}
+
+function saveGame() {
+    const gameState = {
+        grid: grid,
+        score: score
+    };
+    localStorage.setItem('game2048', JSON.stringify(gameState));
+}
+
+function loadGame() {
+    const savedGame = localStorage.getItem('game2048');
+    if (savedGame) {
+        const gameState = JSON.parse(savedGame);
+        grid = gameState.grid;
+        score = gameState.score;
+        scoreElement.textContent = score;
+        updateDisplay();
+    }
 }
 
 function handleKeyPress(event) {
@@ -292,10 +316,17 @@ function handleKeyPress(event) {
 
 function startGame() {
     createGrid();
-    initializeGrid();
-    addRandomTile();
-    addRandomTile();
-    updateDisplay();
+    
+    const savedGame = localStorage.getItem('game2048');
+    if (savedGame) {
+        loadGame();
+    } else {
+        initializeGrid();
+        addRandomTile();
+        addRandomTile();
+        updateDisplay();
+        saveGame();
+    }
     
     document.addEventListener('keydown', handleKeyPress);
     document.getElementById('new-game-btn').addEventListener('click', newGame);
