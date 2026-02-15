@@ -184,3 +184,9 @@ th {
 .cell:not([data-value="0"]) {
     animation: appear 0.2s ease-in-out;
 }
+
+#game-over-message {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #776e65;
+}

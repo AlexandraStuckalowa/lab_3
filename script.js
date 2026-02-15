@@ -465,12 +465,13 @@ function startGame() {
     document.getElementById('new-game-btn').addEventListener('click', newGame);
     document.getElementById('undo-btn').addEventListener('click', undo);
 
-    document.getElementById('save-score-btn').addEventListener('click', function() {
+        document.getElementById('save-score-btn').addEventListener('click', function() {
         const playerName = document.getElementById('player-name').value;
         if (playerName.trim() !== '') {
             addLeaderboardEntry(playerName, score);
-            document.getElementById('game-over-modal').style.display = 'none';
-            document.getElementById('player-name').value = '';
+            document.getElementById('game-over-message').textContent = 'Ваш рекорд сохранен';
+            document.getElementById('player-name').style.display = 'none';
+            this.style.display = 'none';
         }
     });
     
@@ -507,6 +508,34 @@ function startGame() {
             }
         });
     });
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, false);
+    
+    document.addEventListener('touchend', function(e) {
+        if (!touchStartX || !touchStartY) return;
+        
+        const touchEndX = e.changedTouches[0].screenX;
+        const touchEndY = e.changedTouches[0].screenY;
+        const dx = touchEndX - touchStartX;
+        const dy = touchEndY - touchStartY;
+        
+        if (Math.abs(dx) > Math.abs(dy)) {
+            if (dx > 50) moveRight();
+            else if (dx < -50) moveLeft();
+        } else {
+            if (dy > 50) moveDown();
+            else if (dy < -50) moveUp();
+        }
+        
+        touchStartX = 0;
+        touchStartY = 0;
+    }, false);
 }
 
 startGame();
