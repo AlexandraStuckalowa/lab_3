@@ -36,12 +36,29 @@ function addRandomTile() {
         }
     }
     
-    
     if (emptyCells.length > 0) {
         const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
         const value = Math.random() < 0.9 ? 2 : 4;
         grid[randomCell.row][randomCell.col] = value;
+        animateNewTile(randomCell.row, randomCell.col);
     }
+}
+
+function animateNewTile(row, col) {
+    const cells = document.querySelectorAll('.cell');
+    const index = row * 4 + col;
+    cells[index].style.animation = 'none';
+    cells[index].offsetHeight;
+    cells[index].style.animation = 'appear 0.2s ease-in-out';
+}
+
+function animateMerge(row, col) {
+    const cells = document.querySelectorAll('.cell');
+    const index = row * 4 + col;
+    cells[index].style.transform = 'scale(1.1)';
+    setTimeout(() => {
+        cells[index].style.transform = 'scale(1)';
+    }, 100);
 }
 
 function updateDisplay() {
@@ -94,6 +111,15 @@ function moveLeft() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            if (cell.textContent !== '') {
+                cell.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    cell.style.transform = 'scale(1)';
+                }, 100);
+            }
+        });
         saveGame();
 
         if (isGameOver()) {
@@ -141,6 +167,15 @@ function moveRight() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            if (cell.textContent !== '') {
+                cell.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    cell.style.transform = 'scale(1)';
+                }, 100);
+            }
+        });
         saveGame();
 
         if (isGameOver()) {
@@ -187,6 +222,15 @@ function moveUp() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            if (cell.textContent !== '') {
+                cell.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    cell.style.transform = 'scale(1)';
+                }, 100);
+            }
+        });
         saveGame();
 
         if (isGameOver()) {
@@ -235,6 +279,15 @@ function moveDown() {
         scoreElement.textContent = score;
         addRandomTile();
         updateDisplay();
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            if (cell.textContent !== '') {
+                cell.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    cell.style.transform = 'scale(1)';
+                }, 100);
+            }
+        });
         saveGame();
 
         if (isGameOver()) {
