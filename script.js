@@ -261,6 +261,14 @@ function isGameOver() {
     return true;
 }
 
+function newGame() {
+    initializeGrid();
+    addRandomTile();
+    addRandomTile();
+    updateDisplay();
+    document.getElementById('game-over-modal').style.display = 'none';
+}
+
 function handleKeyPress(event) {
     switch(event.key) {
         case 'ArrowLeft':
@@ -290,6 +298,7 @@ function startGame() {
     updateDisplay();
     
     document.addEventListener('keydown', handleKeyPress);
+    document.getElementById('new-game-btn').addEventListener('click', newGame);
 }
 
 startGame();
