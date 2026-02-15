@@ -434,6 +434,26 @@ function startGame() {
     document.getElementById('close-leaderboard-btn').addEventListener('click', function() {
         document.getElementById('leaderboard-modal').style.display = 'none';
     });
+
+        document.querySelectorAll('.control-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const direction = this.getAttribute('data-direction');
+            switch(direction) {
+                case 'up':
+                    moveUp();
+                    break;
+                case 'down':
+                    moveDown();
+                    break;
+                case 'left':
+                    moveLeft();
+                    break;
+                case 'right':
+                    moveRight();
+                    break;
+            }
+        });
+    });
 }
 
 startGame();

@@ -161,3 +161,7 @@ th {
         display: block;
     }
 }
+
+.modal:not([style*="display: none"]) ~ .mobile-controls {
+    display: none;
+}
