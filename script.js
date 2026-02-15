@@ -48,6 +48,7 @@ function updateDisplay() {
             const index = row * 4 + col;
             const value = grid[row][col];
             cells[index].textContent = value === 0 ? '' : value;
+            cells[index].setAttribute('data-value', value);
         }
     }
 }
