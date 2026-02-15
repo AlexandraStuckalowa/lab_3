@@ -4,6 +4,7 @@ const scoreElement = document.getElementById('score');
 let grid = [];
 let score = 0;
 let history = [];
+let leaderboard = [];
 
 function createGrid() {
     gridContainer.innerHTML = '';
@@ -288,6 +289,44 @@ function saveGame() {
     localStorage.setItem('game2048', JSON.stringify(gameState));
 }
 
+function saveLeaderboard() {
+    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+}
+
+function addLeaderboardEntry(name, score) {
+    const entry = {
+        name: name,
+        score: score,
+        date: new Date().toLocaleDateString('ru-RU')
+    };
+    
+    leaderboard.push(entry);
+    
+    leaderboard.sort((a, b) => b.score - a.score);
+    
+    if (leaderboard.length > 10) {
+        leaderboard = leaderboard.slice(0, 10);
+    }
+    
+    saveLeaderboard();
+    displayLeaderboard();
+}
+
+function displayLeaderboard() {
+    const tbody = document.getElementById('leaderboard-body');
+    tbody.innerHTML = '';
+    
+    leaderboard.forEach(entry => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${entry.name}</td>
+            <td>${entry.score}</td>
+            <td>${entry.date}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
 function saveState() {
     const state = {
         grid: grid.map(row => [...row]),
@@ -324,6 +363,15 @@ function loadGame() {
     }
 }
 
+function loadLeaderboard() {
+    const savedLeaderboard = localStorage.getItem('leaderboard');
+    if (savedLeaderboard) {
+        leaderboard = JSON.parse(savedLeaderboard);
+    } else {
+        leaderboard = [];
+    }
+}
+
 function handleKeyPress(event) {
     switch(event.key) {
         case 'ArrowLeft':
@@ -346,6 +394,7 @@ function handleKeyPress(event) {
 }
 
 function startGame() {
+    loadLeaderboard();
     createGrid();
     
     const savedGame = localStorage.getItem('game2048');
@@ -362,6 +411,29 @@ function startGame() {
     document.addEventListener('keydown', handleKeyPress);
     document.getElementById('new-game-btn').addEventListener('click', newGame);
     document.getElementById('undo-btn').addEventListener('click', undo);
+
+    document.getElementById('save-score-btn').addEventListener('click', function() {
+        const playerName = document.getElementById('player-name').value;
+        if (playerName.trim() !== '') {
+            addLeaderboardEntry(playerName, score);
+            document.getElementById('game-over-modal').style.display = 'none';
+            document.getElementById('player-name').value = '';
+        }
+    });
+    
+    document.getElementById('restart-from-modal-btn').addEventListener('click', function() {
+        document.getElementById('game-over-modal').style.display = 'none';
+        newGame();
+    });
+    
+    document.getElementById('show-leaderboard-btn').addEventListener('click', function() {
+        displayLeaderboard();
+        document.getElementById('leaderboard-modal').style.display = 'block';
+    });
+    
+    document.getElementById('close-leaderboard-btn').addEventListener('click', function() {
+        document.getElementById('leaderboard-modal').style.display = 'none';
+    });
 }
 
 startGame();
