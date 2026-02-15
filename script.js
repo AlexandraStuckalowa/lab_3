@@ -3,6 +3,7 @@ const scoreElement = document.getElementById('score');
 
 let grid = [];
 let score = 0;
+let history = [];
 
 function createGrid() {
     gridContainer.innerHTML = '';
@@ -55,6 +56,7 @@ function updateDisplay() {
 }
 
 function moveLeft() {
+    saveState();
     let moved = false;
     let addedScore = 0;
     
@@ -99,6 +101,7 @@ function moveLeft() {
     }
 }
 function moveRight() {
+    saveState();
     let moved = false;
     let addedScore = 0;
     
@@ -146,6 +149,7 @@ function moveRight() {
 }
 
 function moveUp() {
+    saveState();
     let moved = false;
     let addedScore = 0;
     
@@ -191,6 +195,7 @@ function moveUp() {
 }
 
 function moveDown() {
+    saveState();
     let moved = false;
     let addedScore = 0;
     
@@ -266,6 +271,7 @@ function isGameOver() {
 }
 
 function newGame() {
+    history = [];
     initializeGrid();
     addRandomTile();
     addRandomTile();
@@ -280,6 +286,31 @@ function saveGame() {
         score: score
     };
     localStorage.setItem('game2048', JSON.stringify(gameState));
+}
+
+function saveState() {
+    const state = {
+        grid: grid.map(row => [...row]),
+        score: score
+    };
+    history.push(state);
+    if (history.length > 10) {
+        history.shift();
+    }
+}
+
+function undo() {
+    if (document.getElementById('game-over-modal').style.display === 'block') {
+        return;
+    }
+    if (history.length === 0) return;
+    
+    const prevState = history.pop();
+    grid = prevState.grid.map(row => [...row]);
+    score = prevState.score;
+    scoreElement.textContent = score;
+    updateDisplay();
+    saveGame(); 
 }
 
 function loadGame() {
@@ -330,6 +361,7 @@ function startGame() {
     
     document.addEventListener('keydown', handleKeyPress);
     document.getElementById('new-game-btn').addEventListener('click', newGame);
+    document.getElementById('undo-btn').addEventListener('click', undo);
 }
 
 startGame();
